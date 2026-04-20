@@ -62,13 +62,13 @@ const tripStart = new Date('2026-04-22T00:00:00+03:00');
 const tripEnd = new Date('2026-04-26T23:59:59+03:00');
 
 const outboundFlights: Flight[] = [
-  { airline: 'Finnair', code: 'AY992', route: 'KEF → HEL', time: '08:35 – 15:00', start: '2026-04-22T08:35:00+03:00', highlight: true },
+  { airline: 'Finnair', code: 'AY992', route: 'KEF → HEL', time: '08:35 – 15:00', start: '2026-04-22T08:35:00+03:00' },
   { airline: 'Finnair', code: 'AY994', route: 'KEF → HEL', time: '17:15 – 23:40', start: '2026-04-22T17:15:00+03:00' },
   { airline: 'Icelandair', code: 'FI342', route: 'KEF → HEL', time: '07:30 – 14:00', start: '2026-04-22T07:30:00+03:00' },
 ];
 
 const returnFlights: Flight[] = [
-  { airline: 'Finnair', code: 'AY991', route: 'HEL → KEF', time: '07:10 – 07:50', start: '2026-04-26T07:10:00+03:00', highlight: true },
+  { airline: 'Finnair', code: 'AY991', route: 'HEL → KEF', time: '07:10 – 07:50', start: '2026-04-26T07:10:00+03:00' },
   { airline: 'Finnair', code: 'AY993', route: 'HEL → KEF', time: '15:50 – 16:30', start: '2026-04-26T15:50:00+03:00' },
   { airline: 'Icelandair', code: 'FI343', route: 'HEL → KEF', time: '15:00 – 15:40', start: '2026-04-26T15:00:00+03:00' },
 ];
@@ -815,7 +815,7 @@ function App() {
                 <SectionHeading icon={Phone} title="Neyð og stuðningur" />
                 <div className="mt-4 grid gap-2 text-sm">
                   <button
-                    onClick={() => openLink('tel:112')}
+                    onClick={() => openLink('')}
                     className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left transition hover:bg-slate-100"
                   >
                     <span>Neyðarnúmer</span>
