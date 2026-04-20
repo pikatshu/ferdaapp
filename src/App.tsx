@@ -62,13 +62,13 @@ const tripStart = new Date('2026-04-22T00:00:00+03:00');
 const tripEnd = new Date('2026-04-26T23:59:59+03:00');
 
 const outboundFlights: Flight[] = [
-  { airline: 'Finnair', code: 'AY992', route: 'KEF → HEL', time: '08:35 – 15:00', start: '2026-04-22T08:35:00+03:00'},
+  { airline: 'Finnair', code: 'AY992', route: 'KEF → HEL', time: '08:35 – 15:00', start: '2026-04-22T08:35:00+03:00', highlight: true },
   { airline: 'Finnair', code: 'AY994', route: 'KEF → HEL', time: '17:15 – 23:40', start: '2026-04-22T17:15:00+03:00' },
   { airline: 'Icelandair', code: 'FI342', route: 'KEF → HEL', time: '07:30 – 14:00', start: '2026-04-22T07:30:00+03:00' },
 ];
 
 const returnFlights: Flight[] = [
-  { airline: 'Finnair', code: 'AY991', route: 'HEL → KEF', time: '07:10 – 07:50', start: '2026-04-26T07:10:00+03:00'},
+  { airline: 'Finnair', code: 'AY991', route: 'HEL → KEF', time: '07:10 – 07:50', start: '2026-04-26T07:10:00+03:00', highlight: true },
   { airline: 'Finnair', code: 'AY993', route: 'HEL → KEF', time: '15:50 – 16:30', start: '2026-04-26T15:50:00+03:00' },
   { airline: 'Icelandair', code: 'FI343', route: 'HEL → KEF', time: '15:00 – 15:40', start: '2026-04-26T15:00:00+03:00' },
 ];
@@ -107,6 +107,18 @@ const days: DayItem[] = [
         mapsQuery: 'Helsinki Airport',
         icon: Plane,
         accent: 'from-indigo-500 to-sky-600',
+      },
+      {
+        start: '2026-04-22T18:00:00+03:00',
+        time: '18:00 – 20:00',
+        title: 'Gufa á Löyly Helsinki',
+        details: 'Matur, sauna og útsýni við sjóinn.',
+        location: 'Hernesaarenranta 4, Helsinki',
+        mapsQuery: 'Loyly Helsinki Hernesaarenranta 4 Helsinki',
+        link: 'https://www.loylyhelsinki.fi',
+        linkLabel: 'Skoða Löyly',
+        icon: Sparkles,
+        accent: 'from-amber-500 to-orange-500',
       },
     ],
   },
@@ -153,6 +165,28 @@ const days: DayItem[] = [
         mapsQuery: 'Helsinki city centre',
         icon: Building2,
         accent: 'from-slate-600 to-slate-800',
+      },
+      {
+        start: '2026-04-23T19:00:00+03:00',
+        time: '19:00',
+        title: 'Kvöldverður á Restaurant Savotta',
+        details: 'Finnsk stemning og klassískur matur.',
+        location: 'Aleksanterinkatu 22, Helsinki',
+        mapsQuery: 'Restaurant Savotta Aleksanterinkatu 22 Helsinki',
+        link: 'https://www.savotta.fi',
+        linkLabel: 'Skoða Savotta',
+        icon: UtensilsCrossed,
+        accent: 'from-rose-500 to-red-500',
+      },
+      {
+        start: '2026-04-23T22:00:00+03:00',
+        time: '22:00',
+        title: 'Djammið með Kidda og Esther',
+        details: 'Kvöldstemning.',
+        location: 'Helsinki nightlife',
+        mapsQuery: 'Helsinki nightlife',
+        icon: Beer,
+        accent: 'from-violet-500 to-purple-600',
       },
     ],
   },
@@ -327,6 +361,7 @@ function App() {
   const [now, setNow] = useState(() => new Date());
   const [toast, setToast] = useState<string | null>(null);
   const [selectedOutboundFlight, setSelectedOutboundFlight] = useState<Flight | null>(null);
+  const [selectedReturnFlight, setSelectedReturnFlight] = useState<Flight | null>(null);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -494,10 +529,18 @@ function App() {
           </div>
 
           <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
-            <TabButton active={activeTab === 'plan'} onClick={() => setActiveTab('plan')}>Dagskrá</TabButton>
-            <TabButton active={activeTab === 'transport'} onClick={() => setActiveTab('transport')}>Samgöngur</TabButton>
-            <TabButton active={activeTab === 'useful'} onClick={() => setActiveTab('useful')}>Upplýsingar</TabButton>
-            <TabButton active={activeTab === 'phrases'} onClick={() => setActiveTab('phrases')}>Frasar</TabButton>
+            <TabButton active={activeTab === 'plan'} onClick={() => setActiveTab('plan')}>
+              Dagskrá
+            </TabButton>
+            <TabButton active={activeTab === 'transport'} onClick={() => setActiveTab('transport')}>
+              Samgöngur
+            </TabButton>
+            <TabButton active={activeTab === 'useful'} onClick={() => setActiveTab('useful')}>
+              Upplýsingar
+            </TabButton>
+            <TabButton active={activeTab === 'phrases'} onClick={() => setActiveTab('phrases')}>
+              Frasar
+            </TabButton>
           </div>
 
           {activeTab === 'plan' && (
@@ -506,18 +549,30 @@ function App() {
                 <SectionHeading icon={Hotel} title="Gisting" />
                 <div className="mt-3 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200/70">
                   <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">Morgunmatur & hjól innifalin</span>
+                    <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">
+                      Morgunmatur & hjól innifalin
+                    </span>
                     <span className="text-xs text-slate-500">Hótelið</span>
                   </div>
                   <h2 className="mt-3 text-xl font-bold tracking-tight">Scandic Grand Marina</h2>
                   <p className="mt-1 text-sm text-slate-600">Katajanokanlaituri 7, 00160 Helsinki</p>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <Pill onClick={() => openInMaps('Scandic Grand Marina Katajanokanlaituri 7 Helsinki')}>Opna í korti</Pill>
-                    <Pill onClick={() => openLink('https://www.scandichotels.com/hotels/finland/helsinki/scandic-grand-marina')}>Hótelsíða</Pill>
+                    <Pill onClick={() => openInMaps('Scandic Grand Marina Katajanokanlaituri 7 Helsinki')}>
+                      Opna í korti
+                    </Pill>
+                    <Pill onClick={() => openLink('https://www.scandichotels.com/hotels/finland/helsinki/scandic-grand-marina')}>
+                      Hótelsíða
+                    </Pill>
                   </div>
                   <ul className="mt-4 space-y-2 text-sm text-slate-700">
-                    <li className="flex items-start gap-2"><CircleCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />Morgunmatur innifalinn</li>
-                    <li className="flex items-start gap-2"><CircleCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />Frí hjól í boði</li>
+                    <li className="flex items-start gap-2">
+                      <CircleCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                      Morgunmatur innifalinn
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CircleCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                      Frí hjól í boði
+                    </li>
                   </ul>
                 </div>
               </section>
@@ -533,12 +588,12 @@ function App() {
                     onSelectFlight={(flight) => setSelectedOutboundFlight(flight)}
                   />
                   <FlightGroup
-                  title="Return"
-                  flights={returnFlights}
-                  selectable
-                  selectedFlightCode={selectedReturnFlight?.code ?? null}
-                  onSelectFlight={(flight) => setSelectedReturnFlight(flight)}
-                />
+                    title="Return"
+                    flights={returnFlights}
+                    selectable
+                    selectedFlightCode={selectedReturnFlight?.code ?? null}
+                    onSelectFlight={(flight) => setSelectedReturnFlight(flight)}
+                  />
                 </div>
               </section>
 
@@ -547,14 +602,16 @@ function App() {
                 {selectedOutboundFlight ? (
                   <div className="mt-3 rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-4">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="rounded-full bg-cyan-600 px-3 py-1 text-xs font-bold text-white">Valið flug</span>
+                      <span className="rounded-full bg-cyan-600 px-3 py-1 text-xs font-bold text-white">
+                        Valið útflug
+                      </span>
                       <span className="text-sm font-semibold text-cyan-700">{selectedOutboundFlight.time}</span>
                     </div>
                     <h3 className="mt-3 text-lg font-bold tracking-tight">
                       {selectedOutboundFlight.airline} ({selectedOutboundFlight.code})
                     </h3>
                     <p className="mt-1 text-sm text-slate-600">{selectedOutboundFlight.route}</p>
-                    <p className="mt-1 text-sm text-slate-600">Veldu annað flug til að breyta þessari línu.</p>
+                    <p className="mt-1 text-sm text-slate-600">Veldu annað outbound flug til að breyta þessari línu.</p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Pill onClick={() => setSelectedOutboundFlight(null)}>Hreinsa val</Pill>
                     </div>
@@ -562,19 +619,27 @@ function App() {
                 ) : nextEvent ? (
                   <div className="mt-3 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-4">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">Live</span>
-                      <span className="text-sm font-semibold text-blue-700">{formatCountdown(new Date(nextEvent.start), now)} eftir</span>
+                      <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
+                        Live
+                      </span>
+                      <span className="text-sm font-semibold text-blue-700">
+                        {formatCountdown(new Date(nextEvent.start), now)} eftir
+                      </span>
                     </div>
                     <h3 className="mt-3 text-lg font-bold tracking-tight">{nextEvent.title}</h3>
                     <p className="mt-1 text-sm text-slate-600">{nextEvent.time}</p>
                     <p className="mt-1 text-sm text-slate-600">{nextEvent.location}</p>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {nextEvent.mapsQuery && <Pill onClick={() => openInMaps(nextEvent.mapsQuery!)}>Opna kort</Pill>}
+                      {nextEvent.mapsQuery && (
+                        <Pill onClick={() => openInMaps(nextEvent.mapsQuery!)}>Opna kort</Pill>
+                      )}
                       {nextEvent.link && <Pill onClick={() => openLink(nextEvent.link!)}>Opna síðu</Pill>}
                     </div>
                   </div>
                 ) : (
-                  <div className="mt-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">Engin fleiri atriði eftir í dagskránni.</div>
+                  <div className="mt-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+                    Engin fleiri atriði eftir í dagskránni.
+                  </div>
                 )}
               </section>
 
@@ -589,7 +654,9 @@ function App() {
                       return (
                         <article
                           key={event.start + event.title}
-                          className={`rounded-2xl border p-4 transition ${isNext ? 'border-blue-300 bg-blue-50/70 shadow-sm' : 'border-slate-200 bg-slate-50'}`}
+                          className={`rounded-2xl border p-4 transition ${
+                            isNext ? 'border-blue-300 bg-blue-50/70 shadow-sm' : 'border-slate-200 bg-slate-50'
+                          }`}
                         >
                           <div className="flex items-start gap-3">
                             <div className={`rounded-2xl bg-gradient-to-br ${event.accent} p-3 text-white shadow-sm`}>
@@ -602,7 +669,9 @@ function App() {
                                   {event.time}
                                 </span>
                               </div>
-                              {event.details && <p className="mt-1 text-sm leading-6 text-slate-600">{event.details}</p>}
+                              {event.details && (
+                                <p className="mt-1 text-sm leading-6 text-slate-600">{event.details}</p>
+                              )}
                               {event.location && (
                                 <div className="mt-2 flex items-start gap-2 text-sm text-slate-600">
                                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
@@ -629,28 +698,29 @@ function App() {
                   </div>
                 </section>
               ))}
-            {selectedReturnFlight && (
-              <section className="rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-                <SectionHeading icon={Plane} title="Valið heimflug" />
-                <div className="mt-3 rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="rounded-full bg-cyan-600 px-3 py-1 text-xs font-bold text-white">
-                      Return selected
-                    </span>
-                    <span className="text-sm font-semibold text-cyan-700">
-                      {selectedReturnFlight.time}
-                    </span>
+
+              {selectedReturnFlight && (
+                <section className="rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+                  <SectionHeading icon={Plane} title="Valið heimflug" />
+                  <div className="mt-3 rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="rounded-full bg-cyan-600 px-3 py-1 text-xs font-bold text-white">
+                        Valið heimflug
+                      </span>
+                      <span className="text-sm font-semibold text-cyan-700">{selectedReturnFlight.time}</span>
+                    </div>
+                    <h3 className="mt-3 text-lg font-bold tracking-tight">
+                      {selectedReturnFlight.airline} ({selectedReturnFlight.code})
+                    </h3>
+                    <p className="mt-1 text-sm text-slate-600">{selectedReturnFlight.route}</p>
+                    <p className="mt-1 text-sm text-slate-600">Veldu annað return flug til að breyta þessari línu.</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <Pill onClick={() => setSelectedReturnFlight(null)}>Hreinsa val</Pill>
+                    </div>
                   </div>
-                  <h3 className="mt-3 text-lg font-bold tracking-tight">
-                    {selectedReturnFlight.airline} ({selectedReturnFlight.code})
-                  </h3>
-                  <p className="mt-1 text-sm text-slate-600">{selectedReturnFlight.route}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Pill onClick={() => setSelectedReturnFlight(null)}>Hreinsa val</Pill>
-                  </div>
-                </div>
-              </section>
-            )}
+                </section>
+              )}
+            </div>
           )}
 
           {activeTab === 'transport' && (
@@ -666,7 +736,9 @@ function App() {
                   <TransportRow title="Akstur hópsins" time="Samkvæmt dagskrá" price="Innifalið" />
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <Pill onClick={() => openInMaps('Helsinki Airport to Helsinki city centre')}>Route planner</Pill>
+                  <Pill onClick={() => openInMaps('Helsinki Airport to Helsinki city centre')}>
+                    Route planner
+                  </Pill>
                   <Pill onClick={() => openLink('https://www.hsl.fi/en')}>HSL</Pill>
                 </div>
               </section>
@@ -710,7 +782,10 @@ function App() {
                 <SectionHeading icon={Info} title="Gott að vita" />
                 <div className="mt-4 space-y-2">
                   {quickFacts.map((item) => (
-                    <div key={item.label} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <div
+                      key={item.label}
+                      className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"
+                    >
                       <span className="text-sm text-slate-600">{item.label}</span>
                       <span className="font-semibold text-slate-900">{item.value}</span>
                     </div>
@@ -740,7 +815,7 @@ function App() {
                 <SectionHeading icon={Phone} title="Neyð og stuðningur" />
                 <div className="mt-4 grid gap-2 text-sm">
                   <button
-                    onClick={() => openLink('')}
+                    onClick={() => openLink('tel:112')}
                     className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left transition hover:bg-slate-100"
                   >
                     <span>Neyðarnúmer</span>
@@ -943,26 +1018,22 @@ function FlightCard({
   }`;
 
   const content = (
-    <>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{flight.airline}</div>
-          <div className="mt-1 flex items-center gap-2">
-            <div className="text-base font-bold text-slate-900">{flight.code}</div>
-            {selected && (
-              <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-[11px] font-bold text-white">Valið</span>
-            )}
-          </div>
-          <div className="mt-1 text-sm text-slate-600">{flight.route}</div>
+    <div className="flex items-start justify-between gap-3">
+      <div className="min-w-0">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{flight.airline}</div>
+        <div className="mt-1 flex items-center gap-2">
+          <div className="text-base font-bold text-slate-900">{flight.code}</div>
+          {selected && <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-[11px] font-bold text-white">Valið</span>}
         </div>
-        <div className="flex items-center gap-2">
-          <div className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-slate-800 ring-1 ring-slate-200">
-            {flight.time}
-          </div>
-          {selectable && <ChevronRight className="h-4 w-4 text-slate-400" />}
-        </div>
+        <div className="mt-1 text-sm text-slate-600">{flight.route}</div>
       </div>
-    </>
+      <div className="flex items-center gap-2">
+        <div className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-slate-800 ring-1 ring-slate-200">
+          {flight.time}
+        </div>
+        {selectable && <ChevronRight className="h-4 w-4 text-slate-400" />}
+      </div>
+    </div>
   );
 
   if (!selectable) {
