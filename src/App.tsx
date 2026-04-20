@@ -532,7 +532,13 @@ function App() {
                     selectedFlightCode={selectedOutboundFlight?.code ?? null}
                     onSelectFlight={(flight) => setSelectedOutboundFlight(flight)}
                   />
-                  <FlightGroup title="Return" flights={returnFlights} />
+                  <FlightGroup
+                  title="Return"
+                  flights={returnFlights}
+                  selectable
+                  selectedFlightCode={selectedReturnFlight?.code ?? null}
+                  onSelectFlight={(flight) => setSelectedReturnFlight(flight)}
+                />
                 </div>
               </section>
 
@@ -623,7 +629,28 @@ function App() {
                   </div>
                 </section>
               ))}
-            </div>
+            {selectedReturnFlight && (
+              <section className="rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+                <SectionHeading icon={Plane} title="Valið heimflug" />
+                <div className="mt-3 rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="rounded-full bg-cyan-600 px-3 py-1 text-xs font-bold text-white">
+                      Return selected
+                    </span>
+                    <span className="text-sm font-semibold text-cyan-700">
+                      {selectedReturnFlight.time}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 text-lg font-bold tracking-tight">
+                    {selectedReturnFlight.airline} ({selectedReturnFlight.code})
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-600">{selectedReturnFlight.route}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Pill onClick={() => setSelectedReturnFlight(null)}>Hreinsa val</Pill>
+                  </div>
+                </div>
+              </section>
+            )}
           )}
 
           {activeTab === 'transport' && (
