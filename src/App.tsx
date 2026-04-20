@@ -47,7 +47,7 @@ type EventItem = {
   location?: string;
   mapsQuery?: string;
   mapsLabel?: string;
-  //mapsLinks?: { label: string; query: string }[];
+  mapsLinks?: { label: string; query: string }[];
   link?: string;
   linkLabel?: string;
   icon: IconType;
@@ -123,6 +123,7 @@ const days: DayItem[] = [
         details: 'Um 15 mín ganga.',
         location: 'Scandic Grand Marina',
         mapsQuery: 'Scandic Grand Marina Katajanokanlaituri 7 Helsinki',
+        mapsLabel: 'Kort',
         icon: Hotel,
         accent: 'from-indigo-500 to-slate-700',
       },
@@ -144,6 +145,7 @@ const days: DayItem[] = [
         details: 'Public Governance · Public Sector ICT · Budget & Fiscal Policy.',
         location: 'House of the Estates, Snellmaninkatu 9-11',
         mapsQuery: 'House of the Estates Snellmaninkatu 9 11 Helsinki',
+        mapsLabel: 'Kort',
         icon: MessageSquare,
         accent: 'from-fuchsia-500 to-pink-500',
       },
@@ -155,12 +157,12 @@ const days: DayItem[] = [
         location: 'Helsinki centrum',
         mapsLinks: [
           { label: 'NIB', query: 'Fabianinkatu 34 Helsinki' },
-          { label: 'Hansel / Senate', query: 'Mannerheiminaukio 1 A Helsinki' }
+          { label: 'Hansel / Senate', query: 'Mannerheiminaukio 1 A Helsinki' },
         ],
         icon: Building2,
         accent: 'from-slate-600 to-slate-800',
       },
-      ],
+    ],
   },
   {
     day: 'Föstudagur 24. apríl',
@@ -206,6 +208,7 @@ const days: DayItem[] = [
         details: 'Dresscode: Fínn. Matur: Laxapastrami & nautalund. Atriði: Alvilda Eyvör & DJ Júró Reynir.',
         location: 'Scandic Grand Marina',
         mapsQuery: 'Scandic Grand Marina Katajanokanlaituri 7 Helsinki',
+        mapsLabel: 'Kort',
         icon: Hotel,
         accent: 'from-slate-700 to-slate-900',
       },
@@ -222,6 +225,7 @@ const days: DayItem[] = [
         details: 'Rölt um borgina',
         location: 'Hótellobbýið',
         mapsQuery: 'Scandic Grand Marina Katajanokanlaituri 7 Helsinki',
+        mapsLabel: 'Kort',
         icon: Coffee,
         accent: 'from-emerald-500 to-lime-500',
       },
@@ -232,6 +236,7 @@ const days: DayItem[] = [
         details: 'Skoðaðu fögru Helsinki. Listasýning, kaffihús, verslanir.',
         location: 'Central Helsinki',
         mapsQuery: 'Central Helsinki',
+        mapsLabel: 'Kort',
         icon: MapIcon,
         accent: 'from-blue-500 to-cyan-500',
       },
@@ -248,6 +253,7 @@ const days: DayItem[] = [
         details: 'HEL → KEF',
         location: 'Helsinki-Vantaa flugvöllur',
         mapsQuery: 'Helsinki Airport',
+        mapsLabel: 'Kort',
         icon: Plane,
         accent: 'from-sky-500 to-blue-600',
       },
@@ -258,6 +264,7 @@ const days: DayItem[] = [
         details: 'HEL → KEF',
         location: 'Helsinki-Vantaa flugvöllur',
         mapsQuery: 'Helsinki Airport',
+        mapsLabel: 'Kort',
         icon: Plane,
         accent: 'from-sky-500 to-blue-600',
       },
@@ -268,6 +275,7 @@ const days: DayItem[] = [
         details: 'HEL → KEF',
         location: 'Helsinki-Vantaa flugvöllur',
         mapsQuery: 'Helsinki Airport',
+        mapsLabel: 'Kort',
         icon: Plane,
         accent: 'from-indigo-500 to-sky-600',
       },
@@ -278,6 +286,7 @@ const days: DayItem[] = [
         details: 'Athuga passann, símahleðslu og ferðatöskur.',
         location: 'Scandic Grand Marina',
         mapsQuery: 'Scandic Grand Marina Katajanokanlaituri 7 Helsinki',
+        mapsLabel: 'Kort',
         icon: CircleCheck,
         accent: 'from-slate-600 to-gray-700',
       },
@@ -626,6 +635,7 @@ function App() {
                     {day.events.map((event) => {
                       const isNext = nextEvent?.start === event.start;
                       const Icon = event.icon;
+
                       return (
                         <article
                           key={event.start + event.title}
@@ -653,26 +663,28 @@ function App() {
                                   <span>{event.location}</span>
                                 </div>
                               )}
-                              
+
                               <div className="mt-4 flex flex-wrap gap-2">
                                 {event.mapsLinks?.map((link, i) => (
                                   <Pill key={i} onClick={() => openInMaps(link.query)}>
                                     {link.label} <Navigation className="h-4 w-4" />
                                   </Pill>
                                 ))}
-                              
+
                                 {event.mapsQuery && (
-                                  <Pill onClick={() => openInMaps(event.mapsQuery)}>
+                                  <Pill onClick={() => openInMaps(event.mapsQuery!)}>
                                     {event.mapsLabel ?? 'Kort'} <Navigation className="h-4 w-4" />
                                   </Pill>
                                 )}
-                              
+
                                 {event.link && (
-                                  <Pill onClick={() => openLink(event.link)}>
+                                  <Pill onClick={() => openLink(event.link!)}>
                                     {event.linkLabel ?? 'Síða'} <ExternalLink className="h-4 w-4" />
                                   </Pill>
                                 )}
                               </div>
+                            </div>
+                          </div>
                         </article>
                       );
                     })}
@@ -796,7 +808,7 @@ function App() {
                 <SectionHeading icon={Phone} title="Neyð og stuðningur" />
                 <div className="mt-4 grid gap-2 text-sm">
                   <button
-                    onClick={() => openLink('')}
+                    onClick={() => openLink('tel:112')}
                     className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left transition hover:bg-slate-100"
                   >
                     <span>Neyðarnúmer</span>
@@ -998,32 +1010,28 @@ function FlightCard({
         : 'border-slate-200 bg-slate-50 hover:bg-slate-100'
   }`;
 
-  const content = (
-    <div className="flex items-start justify-between gap-3">
-      <div className="min-w-0">
-        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{flight.airline}</div>
-        <div className="mt-1 flex items-center gap-2">
-          <div className="text-base font-bold text-slate-900">{flight.code}</div>
-          {selected && <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-[11px] font-bold text-white">Valið</span>}
-        </div>
-        <div className="mt-1 text-sm text-slate-600">{flight.route}</div>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-slate-800 ring-1 ring-slate-200">
-          {flight.time}
-        </div>
-        {selectable && <ChevronRight className="h-4 w-4 text-slate-400" />}
-      </div>
-    </div>
-  );
-
-  if (!selectable) {
-    return <div className={className}>{content}</div>;
-  }
-
   return (
     <button type="button" onClick={onSelect} className={className} aria-pressed={selected}>
-      {content}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{flight.airline}</div>
+          <div className="mt-1 flex items-center gap-2">
+            <div className="text-base font-bold text-slate-900">{flight.code}</div>
+            {selected && (
+              <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-[11px] font-bold text-white">
+                Valið
+              </span>
+            )}
+          </div>
+          <div className="mt-1 text-sm text-slate-600">{flight.route}</div>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-slate-800 ring-1 ring-slate-200">
+            {flight.time}
+          </div>
+          {selectable && <ChevronRight className="h-4 w-4 text-slate-400" />}
+        </div>
+      </div>
     </button>
   );
 }
