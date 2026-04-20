@@ -47,7 +47,7 @@ type EventItem = {
   location?: string;
   mapsQuery?: string;
   mapsLabel?: string;
-  mapsLinks?: { label: string; query: string }[];
+  //mapsLinks?: { label: string; query: string }[];
   link?: string;
   linkLabel?: string;
   icon: IconType;
