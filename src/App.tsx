@@ -46,6 +46,8 @@ type EventItem = {
   details?: string;
   location?: string;
   mapsQuery?: string;
+  mapsLabel?: string;
+  mapsLinks?: { label: string; query: string }[];
   link?: string;
   linkLabel?: string;
   icon: IconType;
@@ -128,9 +130,10 @@ const days: DayItem[] = [
         start: '2026-04-23T09:00:00+03:00',
         time: '09:00 – 12:00',
         title: 'Fjármálaráðuneytið',
-        details: 'House of the Estates, Snellmaninkatu 9-11. Ræðumenn: Leena Mörttinen, Seppo Orjasniemi, Markus Kari.',
+        details: 'House of the Estates, Snellmaninkatu 9-11...',
         location: 'Snellmaninkatu 9-11',
         mapsQuery: 'House of the Estates Snellmaninkatu 9 11 Helsinki',
+        mapsLabel: 'Kort',
         icon: Landmark,
         accent: 'from-emerald-500 to-teal-600',
       },
@@ -156,7 +159,7 @@ const days: DayItem[] = [
         ],
         icon: Building2,
         accent: 'from-slate-600 to-slate-800',
-      }
+      },
       ],
   },
   {
@@ -168,8 +171,9 @@ const days: DayItem[] = [
         time: '08:45',
         title: 'Stafrænt Finnland (DVV)',
         details: 'Digital and Population Data Services Agency.',
-        location: 'Helsinki',
+        location: 'Lintulahdenkuja 2 D, Helsinki',
         mapsQuery: 'Digital and Population Data Services Agency Helsinki',
+        mapsLabel: 'Kort',
         icon: Route,
         accent: 'from-cyan-500 to-blue-500',
       },
@@ -180,6 +184,7 @@ const days: DayItem[] = [
         details: 'Heimsókn í finnska þingið.',
         location: 'Mannerheimintie 30, Helsinki',
         mapsQuery: 'Finnish Parliament Mannerheimintie 30 Helsinki',
+        mapsLabel: 'Kort',
         icon: Landmark,
         accent: 'from-amber-500 to-yellow-500',
       },
@@ -188,8 +193,9 @@ const days: DayItem[] = [
         time: '17:00',
         title: 'Íslenska sendiráðið',
         details: 'Heimsókn og fordrykkur.',
-        location: 'Helsinki',
+        location: 'Pohjoisesplanadi 25 B, 00100 Helsinki',
         mapsQuery: 'Embassy of Iceland Helsinki',
+        mapsLabel: 'Kort'
         icon: Building2,
         accent: 'from-indigo-500 to-sky-600',
       },
@@ -647,20 +653,26 @@ function App() {
                                   <span>{event.location}</span>
                                 </div>
                               )}
-                            </div>
-                          </div>
-                          <div className="mt-4 flex flex-wrap gap-2">
-                            {event.mapsLinks?.map((link, i) => (
-                              <Pill key={i} onClick={() => openInMaps(link.query)}>
-                                {link.label} <Navigation className="h-4 w-4" />
-                              </Pill>
-                            ))}
-                            {event.link && (
-                              <Pill onClick={() => openLink(event.link!)}>
-                                {event.linkLabel ?? 'Síða'} <ExternalLink className="h-4 w-4" />
-                              </Pill>
-                            )}
-                          </div>
+                              
+                              <div className="mt-4 flex flex-wrap gap-2">
+                                {event.mapsLinks?.map((link, i) => (
+                                  <Pill key={i} onClick={() => openInMaps(link.query)}>
+                                    {link.label} <Navigation className="h-4 w-4" />
+                                  </Pill>
+                                ))}
+                              
+                                {event.mapsQuery && (
+                                  <Pill onClick={() => openInMaps(event.mapsQuery)}>
+                                    {event.mapsLabel ?? 'Kort'} <Navigation className="h-4 w-4" />
+                                  </Pill>
+                                )}
+                              
+                                {event.link && (
+                                  <Pill onClick={() => openLink(event.link)}>
+                                    {event.linkLabel ?? 'Síða'} <ExternalLink className="h-4 w-4" />
+                                  </Pill>
+                                )}
+                              </div>
                         </article>
                       );
                     })}
