@@ -108,18 +108,6 @@ const days: DayItem[] = [
         icon: Plane,
         accent: 'from-indigo-500 to-sky-600',
       },
-      {
-        start: '2026-04-22T18:00:00+03:00',
-        time: '18:00 – 20:00',
-        title: 'Gufa á Löyly Helsinki',
-        details: 'Matur, sauna og útsýni við sjóinn.',
-        location: 'Hernesaarenranta 4, Helsinki',
-        mapsQuery: 'Loyly Helsinki Hernesaarenranta 4 Helsinki',
-        link: 'https://www.loylyhelsinki.fi',
-        linkLabel: 'Skoða Löyly',
-        icon: Sparkles,
-        accent: 'from-amber-500 to-orange-500',
-      },
     ],
   },
   {
@@ -159,36 +147,17 @@ const days: DayItem[] = [
       {
         start: '2026-04-23T14:00:00+03:00',
         time: '14:00',
-        title: 'Heimsóknir',
-        details: 'NIB eða Hansel / Senate.',
+        title: 'NIB eða Hansel / Senate.',
+        details: 'Hópnum skipt eftir skráningu',
         location: 'Helsinki centrum',
-        mapsQuery: 'Helsinki city centre',
+        mapsLinks: [
+          { label: 'NIB', query: 'Fabianinkatu 34 Helsinki' },
+          { label: 'Hansel / Senate', query: 'Mannerheiminaukio 1 A Helsinki' }
+        ],
         icon: Building2,
         accent: 'from-slate-600 to-slate-800',
-      },
-      {
-        start: '2026-04-23T19:00:00+03:00',
-        time: '19:00',
-        title: 'Kvöldverður á Restaurant Savotta',
-        details: 'Finnsk stemning og klassískur matur.',
-        location: 'Aleksanterinkatu 22, Helsinki',
-        mapsQuery: 'Restaurant Savotta Aleksanterinkatu 22 Helsinki',
-        link: 'https://www.savotta.fi',
-        linkLabel: 'Skoða Savotta',
-        icon: UtensilsCrossed,
-        accent: 'from-rose-500 to-red-500',
-      },
-      {
-        start: '2026-04-23T22:00:00+03:00',
-        time: '22:00',
-        title: 'Djammið með Kidda og Esther',
-        details: 'Kvöldstemning.',
-        location: 'Helsinki nightlife',
-        mapsQuery: 'Helsinki nightlife',
-        icon: Beer,
-        accent: 'from-violet-500 to-purple-600',
-      },
-    ],
+      }
+      ],
   },
   {
     day: 'Föstudagur 24. apríl',
@@ -242,9 +211,9 @@ const days: DayItem[] = [
     events: [
       {
         start: '2026-04-25T11:00:00+03:00',
-        time: 'Sveigjanlegt',
+        time: '11:00',
         title: 'Göngutúr um Helsinki',
-        details: 'Gott fyrir kaffihús, markaði og myndir.',
+        details: 'Rölt um borgina',
         location: 'Katajanokka / Market Square',
         mapsQuery: 'Kauppatori Helsinki',
         icon: Coffee,
@@ -681,11 +650,11 @@ function App() {
                             </div>
                           </div>
                           <div className="mt-4 flex flex-wrap gap-2">
-                            {event.mapsQuery && (
-                              <Pill onClick={() => openInMaps(event.mapsQuery!)}>
-                                Kort <Navigation className="h-4 w-4" />
+                            {event.mapsLinks?.map((link, i) => (
+                              <Pill key={i} onClick={() => openInMaps(link.query)}>
+                                {link.label} <Navigation className="h-4 w-4" />
                               </Pill>
-                            )}
+                            ))}
                             {event.link && (
                               <Pill onClick={() => openLink(event.link!)}>
                                 {event.linkLabel ?? 'Síða'} <ExternalLink className="h-4 w-4" />
