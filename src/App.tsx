@@ -193,10 +193,10 @@ const days: DayItem[] = [
       {
         start: '2026-04-24T17:00:00+03:00',
         time: '17:00',
-        title: 'Íslenska sendiráðið',
+        title: 'Sendiherrabústaðurinn',
         details: 'Heimsókn og fordrykkur.',
-        location: 'Pohjoisesplanadi 25 B, 00100 Helsinki',
-        mapsQuery: 'Embassy of Iceland Helsinki',
+        location: 'Pohjoisranta 10 00170 Helsinki',
+        mapsQuery: 'Pohjoisranta 10 00170 Helsinki',
         mapsLabel: 'Kort',
         icon: Building2,
         accent: 'from-indigo-500 to-sky-600',
